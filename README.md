@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 3. Set up your local PostgreSQL database
 
-4. Create a `.env` file in the settings folder (for local development) or create a `.env` file in the root directory (for docker development) with required variables (see Environment Variables section)
+4. Create a `.env` file in the settings folder (for local development) and create a `.env` file in the root directory (for docker development) with required variables (see Environment Variables section)
 
 5. Run migrations:
 ```bash

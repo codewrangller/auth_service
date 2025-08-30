@@ -141,8 +141,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get("request")
+        email = validated_data['email'].lower()
         user = User.objects.create(
-            email=validated_data['email'].lower(),
+            email=email,
+            username=email,  # Set username to email
             full_name=validated_data['full_name'],
             password=make_password(validated_data['password2'])
         )

@@ -7,4 +7,9 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=50, unique=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'full_name']
+    REQUIRED_FIELDS = ['full_name']  # Remove username from required fields
+
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = self.email  # Set username to email if not provided
+        super().save(*args, **kwargs)

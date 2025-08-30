@@ -148,7 +148,7 @@ REDIS_URI=redis://redis:6379/1
 
 ## Deployment
 
-[Add your deployment link here]
+https://auth-service-web.onrender.com/swagger/
 
 ## Contributing
 

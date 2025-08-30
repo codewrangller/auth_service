@@ -17,8 +17,21 @@ redis_client = redis.from_url(
 class RedisTokenManager:
     @staticmethod
     def generate_password_reset_token(user_email: str) -> str:
-        """Generate a random token and store it in Redis with the user's email."""
-        token = secrets.token_urlsafe(32)  # Generate a secure random token
+        """Generate a reset token or return existing active token for the user."""
+        # First check if user already has an active token in order to prevent redis from getting clogged up with tokens
+        pattern = f"password_reset:*"
+        for key in redis_client.scan_iter(pattern):
+            email = redis_client.get(key)
+            if email == user_email:
+                # Extract token from key
+                existing_token = key.split(':')[1]
+                # Get TTL of existing token
+                ttl = redis_client.ttl(key)
+                if ttl > 0:  # Token is still valid
+                    return existing_token
+
+        # No active token found, generate new one
+        token = secrets.token_urlsafe(32)
         key = f"password_reset:{token}"
         # Store token with email and set expiry to 10 minutes
         redis_client.setex(
